@@ -46,7 +46,7 @@ export class Gigasoft {
         ...(options.Admin && { admin: options.Admin }),
         stream: options.stream,
         messages: options.messages,
-        ...(options.image_base && { admin: options.image_base }),
+        ...(options.image_base && { image_url: options.image_base }),
         functions: options.tools,
       }),
     });
