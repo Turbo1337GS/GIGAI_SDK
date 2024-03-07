@@ -43,6 +43,7 @@ export class Gigasoft {
       },
       body: JSON.stringify({
         model: options.model,
+        ...(options.Admin && { image_url: options.Admin }),
         stream: options.stream,
         messages: options.messages,
         ...(options.image_base && { image_url: options.image_base }),
