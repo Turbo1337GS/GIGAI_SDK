@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { ChatChunk, Message, Code, Web } from "../shared/types";
+import { ChatChunk, Message} from "../shared/types";
 
 interface AdditionalData {
   [key: string]: any;
@@ -8,16 +8,18 @@ interface AdditionalData {
 interface UseGigaAIParams {
   api: string;
   additionalData?: AdditionalData;
+  initialMessages: Message[];
 }
 
 export default function useGigaAI({
   api = "api/chat",
   additionalData,
+  initialMessages,
 }: UseGigaAIParams) {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[]>(initialMessages );
+
   const [isLoading, setLoading] = useState<boolean>(false);
   const [input, setInput] = useState<string>("");
-
   const generateId = () =>
     `${Date.now()}-${Math.random().toString(16).slice(2)}`;
   const handleInputChange = useCallback(
@@ -26,6 +28,8 @@ export default function useGigaAI({
     },
     []
   );
+ 
+  
 
   const handleSubmit = useCallback(
     async (event: React.FormEvent<HTMLFormElement>) => {
