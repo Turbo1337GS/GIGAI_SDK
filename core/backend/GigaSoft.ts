@@ -43,10 +43,10 @@ export class Gigasoft {
       },
       body: JSON.stringify({
         model: options.model,
-        ...(options.Admin && { image_url: options.Admin }),
+        ...(options.Admin && { admin: options.Admin }),
         stream: options.stream,
         messages: options.messages,
-        ...(options.image_base && { image_url: options.image_base }),
+        ...(options.image_base && { admin: options.image_base }),
         functions: options.tools,
       }),
     });
