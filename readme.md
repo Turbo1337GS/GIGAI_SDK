@@ -15,7 +15,7 @@ Welcome to the GigaAI Chat Hook documentation. This React hook is designed to si
 
  ### Changelog
 
-07.03.2024
+* 07.03.2024
 <details>
 
 <summary> <b>Click to expand </b></summary>
@@ -34,6 +34,25 @@ export default function useGigaAI({
 ```
 Now u can send optional data to api 
 
+ ## Added support for receiving raw replies
+
+Example 
+```ts
+export async function POST(req: Request) {
+  const { messages } = await req.json();
+  
+  const raw = "aaaa";
+  return new Response(raw);
+
+  const stream = await Giga.chat({
+    model: "GigAI-v1",
+    messages: messages,
+    stream:true, // must be set to true, for hook useGigAI react...
+    
+  })
+  return new Response(stream);
+}
+```
 </details>
 
 
