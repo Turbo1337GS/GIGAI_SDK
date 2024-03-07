@@ -36,6 +36,7 @@ export async function POST(req: Request) {
 'use client';
 import useGigaAI from "@/package/core/frontend/react";
  // code from https://sdk.vercel.ai/docs/guides/providers/openai
+ // But using hook useGigaAI()
 export default function Chat() {
   const { messages, input, handleInputChange, handleSubmit } = useGigaAI();
   return (
