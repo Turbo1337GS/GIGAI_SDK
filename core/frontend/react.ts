@@ -40,7 +40,11 @@ export default function useGigaAI({
       setLoading(true);
       setInput("");
 
-      const messagesToSend = messages.map(({ id, ...rest }) => rest);
+      const messagesToSend = messages.map(({ role, content }) => {
+        return { role, content };
+      });
+
+      // Dodanie ostatniej wiadomości użytkownika
       messagesToSend.push({ role: "user", content: userMessageWithId.content });
 
       const assistantMessageId = generateId();
@@ -62,16 +66,19 @@ export default function useGigaAI({
         const Text = response.headers.get("Content-Type");
         console.log(Text);
         if (Text && Text.includes("text/plain")) {
-          const RawRes = await response.text(); 
-          console.log(RawRes); 
-          setMessages(oldMessages => [...oldMessages, {
-            id: assistantMessageId,
-            role: 'assistant',
-            content: RawRes,
-          }]);
+          const RawRes = await response.text();
+          console.log(RawRes);
+          setMessages((oldMessages) => [
+            ...oldMessages,
+            {
+              id: assistantMessageId,
+              role: "assistant",
+              content: RawRes,
+            },
+          ]);
           setLoading(false);
         }
-        
+
         if (transferEncoding && transferEncoding.includes("chunked")) {
           const reader = response.body?.getReader();
           let decoder = new TextDecoder();
@@ -133,9 +140,7 @@ export default function useGigaAI({
               }
             }
           }
-          
         }
-        
       } catch (error) {
         console.error("Fetching error: ", error);
         setLoading(false);
