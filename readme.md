@@ -8,6 +8,61 @@ Welcome to the GigaAI Chat Hook documentation. This React hook is designed to si
 
 The GigaAI Chat Hook (`useGigaAI`) is a part of `@/package/core/frontend/react.ts` within the GigaSoft AI package. It enables easy integration with GigaSoft AI's chat API, allowing for real-time chat functionalities within your React application. This initial version (v0.1) supports a selection of NLP models and will be updated to include more models such as GigAI-OCR in future releases.
 
+
+### src/app/api/chat/route.tsx
+```tsx
+
+import Gigasoft from "@/package/core/backend/GigaSoft";
+export const runtime = 'edge';
+const Giga = new Gigasoft({
+  API_KEY:process.env.GIGAI
+})
+
+export async function POST(req: Request) {
+  const { messages } = await req.json();
+  
+  const stream = await Giga.chat({
+    model: "GigAI-v1",
+    messages: messages,
+    stream:true, // must be set to true, for hook useGigAI react...
+    
+  })
+  return new Response(stream);
+}
+```
+
+### src/app/page.tsx
+```tsx
+'use client';
+import useGigaAI from "@/package/core/frontend/react";
+ // code from https://sdk.vercel.ai/docs/guides/providers/openai
+export default function Chat() {
+  const { messages, input, handleInputChange, handleSubmit } = useGigaAI();
+  return (
+    <div className="flex flex-col w-full max-w-md py-24 mx-auto stretch">
+      {messages.map(m => (
+        <div key={m.id} className="whitespace-pre-wrap">
+          {m.role === 'user' ? 'User: ' : 'AI: '}
+          {m.content}
+        </div>
+      ))}
+ 
+      <form onSubmit={handleSubmit}>
+        <input
+          className="fixed bottom-0 w-full max-w-md p-2 mb-8 border border-gray-300 rounded shadow-xl"
+          value={input}
+          placeholder="Say something..."
+          onChange={handleInputChange}
+        />
+      </form>
+    </div>
+  );
+}
+```
+
+
+
+
 ### Supported AI Models
 
 As of version 0.1, the following NLP models are supported:
