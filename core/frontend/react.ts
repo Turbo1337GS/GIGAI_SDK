@@ -1,10 +1,7 @@
-<<<<<<< HEAD
+
 import { useState, useCallback, useEffect } from "react";
 import { ChatChunk, Message } from "../shared/types";
-=======
-import { useState, useCallback } from "react";
-import { ChatChunk, Message} from "../shared/types";
->>>>>>> 276d16f12f9676b4192d76a535959e00ef085e1b
+
 
 interface AdditionalData {
   [key: string]: any;
