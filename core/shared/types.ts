@@ -8,6 +8,7 @@ export interface Message {
   wait?: any; 
   image_url?: string; 
   ExternID?:string; // ID from api GigaSoft
+  model?:string;
 }
 
 
