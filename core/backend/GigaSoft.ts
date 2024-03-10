@@ -6,8 +6,7 @@ interface GigasoftOptions {
   API_KEY?: string;
 }
 //const URL: string = "https://main.gigasoft.com.pl/v2/chat/completions";
-const URL: string = "http://localhost:3001/api/chat";
-
+const URL: string = "https://main.gigasoft.com.pl/v2/chat/completions";
 export class Gigasoft {
   private API_KEY: string;
 
