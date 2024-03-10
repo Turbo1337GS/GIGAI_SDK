@@ -1,16 +1,54 @@
 // src/package/backend/gigasoft.ts
 
-import { ChatOptions } from "./../shared/types";
+import { ChatOptions, OcrOptions } from "./../shared/types";
 
 interface GigasoftOptions {
   API_KEY?: string;
 }
+//const URL: string = "https://main.gigasoft.com.pl/v2/chat/completions";
+const URL: string = "http://localhost:3001/api/chat";
 
 export class Gigasoft {
   private API_KEY: string;
 
   constructor(options: GigasoftOptions = {}) {
     this.API_KEY = options.API_KEY || process.env.GIGAI || "";
+  }
+
+  async ocr(options: OcrOptions): Promise<string> {
+    if (!this.API_KEY) {
+      throw new Error("Error: Unable to read API key or API key not provided");
+    }
+
+    if (!options.model) {
+      throw new Error(
+        "Model name not provided! Check the list of models at https://main.gigasoft.com.pl/v2/chat/completions"
+      );
+    }
+    if(!options.image){
+      throw new Error('Image is required');
+    }
+    const response = await fetch(`${URL}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${this.API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: options.model,
+        url: options.image,
+      }),
+    });
+    if(response.status === 200)
+    {
+      return (await response.json());
+    }
+    else 
+    {    
+      // alpha handle errors
+      const error = await response.json();
+      throw new Error(error)
+    }
   }
 
   async chat(options: ChatOptions): Promise<ReadableStream | string> {
@@ -34,9 +72,6 @@ export class Gigasoft {
       );
     }
 
-    const URL: string = "https://main.gigasoft.com.pl/v2/chat/completions"; 
-
-    console.log("URL: ", URL);
     const apiResponse = await fetch(URL, {
       method: "POST",
       headers: {

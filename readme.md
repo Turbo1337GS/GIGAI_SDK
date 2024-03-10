@@ -1,6 +1,5 @@
 # GigaAI Chat Hook Documentation
-
-
+### Current SDK version 0.2
 
 <div style="text-align: center;">
 <img style=" border: 1px solid #ddd; border-radius: 4px; padding: 5px; max-width: 35%; text-align: center;"  src="https://main.gigasoft.com.pl/logo.png"> </img>
@@ -54,6 +53,15 @@ export async function POST(req: Request) {
 }
 ```
 </details>
+
+ * 10.03.2024
+<details>
+
+<summary> <b>Click to expand </b></summary>
+* Added support for models OCR 
+</details>
+
+
 
 
 [Demo web app](https://github.com/Turbo1337GS/ChatbotUI)

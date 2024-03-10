@@ -3,16 +3,16 @@ export interface Message {
   id: string;
   role: "admin" | "user" | "assistant" | "system";
   content: string;
-  code?: Code; 
-  web?: Web; 
-  wait?: any; 
-  image_url?: string; 
-  ExternID?:string; // ID from api GigaSoft
-  model?:string;
+  code?: Code;
+  web?: Web;
+  wait?: any;
+  image_url?: string;
+  ExternID?: string; // ID from api GigaSoft
+  model?: string;
 }
 
-
 //backend
+// **** CHAT ****
 
 export interface ChatChunk {
   id: string;
@@ -25,27 +25,31 @@ export interface ChatChunk {
   Wait?: any;
   image_url?: any;
 }
-export interface Choice {
+
+interface Choice {
   index: number;
   delta: Delta;
   finish_reason: string;
 }
 
-export interface Delta {
+interface Delta {
   role: string;
   content: string;
 }
 
-export interface Web {
+interface Web {
   Analyzing_URL?: any;
   Query?: any;
 }
 
-export interface Code {
+interface Code {
   php_result?: string;
   Python3_result?: string;
 }
 
+interface Tool {
+  name: ToolName;
+}
 
 type ToolName =
   | "qr_creator"
@@ -57,11 +61,8 @@ type ToolName =
   | "python3_interpreter"
   | "web";
 
-interface Tool {
-  name: ToolName; 
-}
 export interface ChatOptions {
-  model: string;
+  model: "GigAI-v1" | "GigAI-v1_5" | "Fake" | string;
   messages: Message | Message[] | any;
   max_tokens?: number;
   stream?: boolean;
@@ -70,6 +71,20 @@ export interface ChatOptions {
   image_base?: string; // base64
   tools?: Tool[];
 }
+
 export interface Admin {
   content: string;
+}
+
+// **** OCR ****
+export interface OcrOptions {
+  model: "GigAI-OCR";
+  image: string; // Base64 or URL for OCR
+}
+export interface OCRResponse {
+  id: string;
+  object: string;
+  created: string;
+  model: string;
+  OcrText: string;
 }
