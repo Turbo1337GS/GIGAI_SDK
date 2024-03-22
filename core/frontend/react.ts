@@ -17,7 +17,6 @@ export default function useGigaAI({
   initialMessages,
 }: UseGigaAIParams) {
   const [messages, setMessages] = useState<Message[]>(initialMessages);
-
   const [isLoading, setLoading] = useState<boolean>(false);
   const [input, setInput] = useState<string>("");
   const generateId = () =>
@@ -65,8 +64,8 @@ export default function useGigaAI({
         const Text = response.headers.get("Content-Type");
         if (Text && Text.includes("text/plain")) {
           let RawRes = await response.text();
-          if (!RawRes.startsWith("data")) // check for raw response, from api!
-           {
+          if (!RawRes.startsWith("data")) {
+            // check for raw response, from api!
             setMessages((oldMessages) => [
               ...oldMessages,
               {
@@ -79,20 +78,19 @@ export default function useGigaAI({
           }
           if (RawRes.startsWith("data")) {
             let RawJson = RawRes.substring("data: ".length);
-          const Ocr: OCRResponse = JSON.parse(RawJson);
-          if (Ocr) {
-            setMessages((oldMessages) => [
-              ...oldMessages,
-              {
-                id: Ocr.id,
-                role: "assistant",
-                content: Ocr.OcrText,
-                ExternID: Ocr.id, 
-              },
-            ]);
-            setLoading(false);
-          }
-          }
+            const Ocr: OCRResponse = JSON.parse(RawJson);
+              setMessages((oldMessages) => [
+                ...oldMessages,
+                {
+                  id: Ocr.id,
+                  role: "assistant",
+                  content: Ocr.OcrText,
+                  ExternID: Ocr.id,
+                },
+              ]);
+              setLoading(false);
+            }
+            console.log(RawRes)
         }
         if (transferEncoding && transferEncoding.includes("chunked")) {
           const reader = response.body?.getReader();

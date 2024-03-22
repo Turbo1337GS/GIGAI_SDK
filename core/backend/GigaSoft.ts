@@ -5,14 +5,34 @@ import { ChatOptions, OcrOptions } from "./../shared/types";
 interface GigasoftOptions {
   API_KEY?: string;
 }
-//const URL: string = "https://main.gigasoft.com.pl/v2/chat/completions";
 const URL: string = "https://main.gigasoft.com.pl/v2/chat/completions";
+//const URL: string = "http://localhost:3001/api/chat";
 export class Gigasoft {
   private API_KEY: string;
 
   constructor(options: GigasoftOptions = {}) {
     this.API_KEY = options.API_KEY || process.env.GIGAI || "";
   }
+  async CheckStstusApi(): Promise<boolean> {
+    const response = await fetch('https://main.gigasoft.com.pl/v2/chat/completions', {
+      method: 'OPTIONS',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      return false;
+    }
+
+    // validate response from api
+    const json = await response.json();
+    if (json.body === "OK")
+      return true;
+    return false;
+  }
+
+
 
   async ocr(options: OcrOptions): Promise<string> {
     if (!this.API_KEY) {
@@ -24,7 +44,7 @@ export class Gigasoft {
         "Model name not provided! Check the list of models at https://main.gigasoft.com.pl/v2/chat/completions"
       );
     }
-    if(!options.image){
+    if (!options.image) {
       throw new Error('Image is required');
     }
     const response = await fetch(`${URL}`, {
@@ -38,12 +58,10 @@ export class Gigasoft {
         url: options.image,
       }),
     });
-    if(response.status === 200)
-    {
+    if (response.status === 200) {
       return (await response.json());
     }
-    else 
-    {    
+    else {
       // alpha handle errors
       const error = await response.json();
       throw new Error(error)
@@ -112,5 +130,5 @@ export class Gigasoft {
     }
   }
 
-  // Placeholder for future methods (OCR, CHECKSTATUS, Download List Models)
+  // Placeholder for future methods and models
 }
